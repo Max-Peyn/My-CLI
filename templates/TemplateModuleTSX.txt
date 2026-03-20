@@ -6,7 +6,7 @@ type {{ComponentName}}Props = {
 
 export const {{ComponentName}}:React.FC<{{ComponentName}}Props> = () => {
     return (
-        <div className={style.{{ComponentName}}}>
+        <div className={styles.{{ComponentName}}}>
             
         </div>
     )
