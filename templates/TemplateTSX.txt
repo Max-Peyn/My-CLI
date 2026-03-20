@@ -1,0 +1,13 @@
+import React from 'react'
+import './{{ComponentName}}.css';
+type {{ComponentName}}Props = {
+    
+}
+
+export const {{ComponentName}}:React.FC<{{ComponentName}}Props> = () => {
+    return (
+        <div className="{{ComponentName}}">
+            
+        </div>
+    )
+}
