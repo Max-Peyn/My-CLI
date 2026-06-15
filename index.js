@@ -62,7 +62,8 @@ function createComponent(type, name) {
     if (!isTS) {
         const templatePath = isModuleStyle ? templates.cssModuleTsx : templates.tsx;
         const jsxTemplate = fs.readFileSync(templatePath, 'utf-8')
-            .replace(/{{ComponentName}}/g, correctName);
+            .replace(/{{ComponentName}}/g, correctName)
+            .replace(/{{ComponentStyleType}}/g, styleType);
         fs.writeFileSync(path.join(componentPath, `${correctName}.jsx`), jsxTemplate);
     } else {
         const templatePath = isModuleStyle ? templates.cssModuleTsx : templates.tsx;

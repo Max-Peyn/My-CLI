@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './{{ComponentName}}.module.css';
+import styles from './{{ComponentName}}.module.{{ComponentStyleType}}';
 type {{ComponentName}}Props = {
     
 }
