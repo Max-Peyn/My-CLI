@@ -7,7 +7,7 @@ const ensureDirectoryExists = require('../utils/ensureDirExists.js');
 const detectSrcPath = require('../utils/detectSrcPath.js');
 const typeDirectoryMap = require('../types/typeDirectoryMap.js');
 const validateComponentType = require('../utils/validateComponentType.js');
-const {templates} = require('../config/paths.js')
+const { templates } = require('../config/paths.js')
 const args = process.argv.slice(2);
 let styleType = 'css';
 let isModuleStyle = false;
@@ -32,40 +32,42 @@ module.exports = function createComponent(type, name) {
         process.exit(1);
     }
 
-    const correctName = normalizeComponentName(name);
+    const { upperCaseName, lowerCaseName } = normalizeComponentName(name);
 
-    const duplicatePath = findDuplicateComponent(correctName);
+    const duplicatePath = findDuplicateComponent(upperCaseName);
     if (duplicatePath) {
-        console.error(`Компонент "${correctName}" вже існує: ${duplicatePath}`);
+        console.error(`Компонент "${upperCaseName}" вже існує: ${duplicatePath}`);
         process.exit(1);
     }
 
     const basePath = getBasePathByType(type);
     ensureDirectoryExists(basePath);
 
-    const componentPath = path.join(basePath, correctName);
+    const componentPath = path.join(basePath, upperCaseName);
     ensureDirectoryExists(componentPath);
 
     if (!isTS) {
         const templatePath = isModuleStyle ? templates.cssModuleJsx : templates.jsx;
         const jsxTemplate = fs.readFileSync(templatePath, 'utf-8')
-            .replace(/{{ComponentName}}/g, correctName)
+            .replace(/{{ComponentName}}/g, upperCaseName)
+            .replace(/{{ComponentStyleName}}/g, lowerCaseName)
             .replace(/{{ComponentStyleType}}/g, styleType);
-        fs.writeFileSync(path.join(componentPath, `${correctName}.jsx`), jsxTemplate);
+        fs.writeFileSync(path.join(componentPath, `${upperCaseName}.jsx`), jsxTemplate);
     } else {
         const templatePath = isModuleStyle ? templates.cssModuleTsx : templates.tsx;
         const tsxTemplate = fs.readFileSync(templatePath, 'utf-8')
-            .replace(/{{ComponentName}}/g, correctName)
+            .replace(/{{ComponentName}}/g, upperCaseName)
+            .replace(/{{ComponentStyleName}}/g, lowerCaseName)
             .replace(/{{ComponentStyleType}}/g, styleType)
-        fs.writeFileSync(path.join(componentPath, `${correctName}.tsx`), tsxTemplate);
+        fs.writeFileSync(path.join(componentPath, `${upperCaseName}.tsx`), tsxTemplate);
     }
 
     const cssTemplate = fs.readFileSync(templates.css, 'utf-8')
-        .replace(/{{ComponentName}}/g, correctName);
+        .replace(/{{ComponentStyleName}}/g, lowerCaseName);
 
-    let styleFileName = `${correctName}.${styleType}`;
-    if (isModuleStyle) styleFileName = `${correctName}.module.${styleType}`;
+    let styleFileName = `${upperCaseName}.${styleType}`;
+    if (isModuleStyle) styleFileName = `${upperCaseName}.module.${styleType}`;
     fs.writeFileSync(path.join(componentPath, styleFileName), cssTemplate);
 
-    console.log(`Компонент "${correctName}" успішно створено: ${componentPath}`);
+    console.log(`Компонент "${upperCaseName}" успішно створено: ${componentPath}`);
 }
