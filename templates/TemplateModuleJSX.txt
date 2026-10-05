@@ -3,7 +3,7 @@ import styles from './{{ComponentName}}.module.{{ComponentStyleType}}';
 
 export const {{ComponentName}} = () => {
     return (
-        <div className={styles.{{ComponentName}}}>
+        <div className={styles.{{ComponentStyleName}}}>
             
         </div>
     )
